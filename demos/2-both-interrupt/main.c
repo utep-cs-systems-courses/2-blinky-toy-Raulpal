@@ -24,9 +24,12 @@ __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
     counter = 0;
     led = !led;              //  either a 1  or a 0
     if (led){
-      P1OUT |= LED_RED;   //  turn on red led
-    else
-      P1OUT &= ~LED_RED;  // turn off red led
+      P1OUT |= LED_RED;      //  turn on leds
+      P1OUT |= LED_GREEN;    
+    }else{
+      P1OUT &= ~LED_RED;  // turn off leds
+      P1OUT &= ~LED_GREEN; 
+    }
   }
 } 
 
