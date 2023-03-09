@@ -6,18 +6,27 @@
 int main(void) {
   P1DIR |= LEDS;
   P1OUT &= ~LED_GREEN;
-  P1OUT |= LED_RED;
 
   configureClocks();		/* setup master oscillator, CPU & peripheral clocks */
   enableWDTInterrupts();	/* enable periodic interrupt */
-  
   or_sr(0x18);		/* CPU off, GIE on */
 }
 
-
+int counter = 0;   // for seconds
+char led = 0;     // to see if led was on or not
 void
 __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 {
-  P1OUT |= LED_GREEN;
+
+  counter++;  
+  
+  if (counter == 250){
+    counter = 0;
+    led = !led;              //  either a 1  or a 0
+    if (led)
+      P1OUT |= LED_GREEN;   //  turn on green led
+    else
+      P1OUT &= ~LED_GREEN;  // turn off green led
+  }
 } 
 
