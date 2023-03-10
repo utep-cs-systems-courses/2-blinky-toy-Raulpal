@@ -5,8 +5,8 @@
 
 int main(void) {
   P1DIR |= LEDS;
-  P1OUT &= ~LED_RED;
-  // P1OUT |= LED_RED;
+  // P1OUT &= ~LED_RED;
+  //P1OUT |= LED_RED;
 
   configureClocks();		/* setup master oscillator, CPU & peripheral clocks */
   enableWDTInterrupts();	/* enable periodic interrupt */
@@ -27,9 +27,12 @@ __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
   if (blinkCount >= blinkLimit) { // on for 1 interrupt period
     blinkCount = 0;
     P1OUT |= LED_GREEN;
-  } else		          // off for blinkLimit - 1 interrupt periods
+    P1OUT |= LED_RED;
+  } else{		          // off for blinkLimit - 1 interrupt periods
     P1OUT &= ~LED_GREEN;
-
+    P1OUT &= ~LED_RED;
+  }
+  
   // measure a second
   secondCount ++;
   if (secondCount >= 500) {  // once each second
