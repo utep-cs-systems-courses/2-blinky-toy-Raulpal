@@ -20,7 +20,7 @@ int greenBlinkCount = 0;  // cycles 0...blinkLimit-1
 int greenSecondCount = 0; // state var representing repeating time 0…1s
 
 // gloabl state var that controla red blinking
-int redBlinkLimit = 5; // duty cycle
+int redBlinkLimit = 3; // duty cycle
 int redBlinkCount = 0; // cycles
 int redSecondCount = 0; // state var representing time
 
@@ -47,7 +47,7 @@ __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
   
   // measure a second for green led
   greenSecondCount ++;
-  if (greenSecondCount >= 500) {  // once each second
+  if (greenSecondCount >= 250) {  // once each second
     greenSecondCount = 0;
     greenBlinkLimit --;	 // increase duty cycle   
     if (greenBlinkLimit <= 0)    
@@ -56,7 +56,7 @@ __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 
   // measure a second for red led
   redSecondCount ++;
-  if (redSecondCount >= 250) {
+  if (redSecondCount >= 63) {
     redSecondCount = 0;
     redBlinkLimit ++;
     if (redBlinkLimit >= 8)
