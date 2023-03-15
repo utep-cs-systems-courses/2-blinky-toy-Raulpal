@@ -22,6 +22,7 @@ void greenControl(int on)
     P1OUT &= ~LED_GREEN;
   }
 }
+
 void redControl(int on)
 {
   if (on) {
@@ -29,7 +30,6 @@ void redControl(int on)
   } else {
     P1OUT &= ~LED_RED;
   }
-
 }
 
 // blink state machine
