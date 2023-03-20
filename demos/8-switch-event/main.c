@@ -8,6 +8,15 @@
 #define SW1 BIT3		/* switch1 is p1.3 */
 #define SWITCHES SW1		/* only 1 switch on this board */
 
+// defining up and down states
+#define up_on 0
+#define dn_on 1
+#define up_off 2
+#define dn_off 3
+
+char button_state = up_on;
+
+
 void main(void) 
 {  
   configureClocks();
@@ -42,17 +51,25 @@ switch_interrupt_handler()
 /* update switch interrupt sense to detect changes from current buttons */
   P1IES |= (p1val & SWITCHES);	/* if switch up, sense down */
   P1IES &= (p1val | ~SWITCHES);	/* if switch down, sense up */
-
-/* up=red, down=green */
-  if (p1val & SW1) {
+  
+  if (button_state == up_on) {
     up_event();
-    // P1OUT |= LED_RED;
-    //P1OUT &= ~LED_GREEN;
-  } else {
-    dn_event();
-    // P1OUT |= LED_GREEN;
-    //P1OUT &= ~LED_RED;
+    button_state = dn_off;
   }
+  else if (button_state == dn_off) {
+    dn_event();
+    button_state = up_off;
+  }
+  else if (button_state == up_off) {
+    dn_event();
+    button_state = dn_on;
+  }
+  else if (button_state == dn_on) {
+    up_event();
+    button_state = up_on;
+
+  }
+  
 }
 
 
