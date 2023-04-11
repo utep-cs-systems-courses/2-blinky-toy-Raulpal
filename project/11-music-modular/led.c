@@ -9,12 +9,12 @@ void led_init()
   
 }
 
-void led_green()
+void greenControl()
 {
   P1OUT ^= GREEN_LED;
 }
 
-void led_red()
+void redControl()
 {
   P1OUT ^= RED_LED;
 }
