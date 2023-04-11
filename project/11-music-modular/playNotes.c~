@@ -1,0 +1,56 @@
+#include <msp430.h>
+#include "led.h"
+#include "playNotes.h"
+#include "musicNotes.h"
+#include "switches.h"
+#include <math.h>
+
+unsigned long int max = 2000000;
+
+void switch_pressed_play_sound(char p2val)
+{
+  if (!(p2val & SW1)) {
+
+    led_green();
+    int i = 0;
+  
+    while (i < sizeof(happy_BDAY)/ sizeof(happy_BDAY[0])) {
+      play_note(happy_BDAY[i], 2);
+       i++;
+    }
+  }else if (!(p2val & SW2)){
+    led_red();
+    int i = 0;
+  
+    while (i < 10) {
+ 
+      play_note(880 ,1);
+      play_note(1760 ,1);
+      i++;
+    }
+ }else if (!(p2val &SW3)) {
+    led_red();
+    int i = 0;
+    int mario_Note = 0;
+   
+    while (i < sizeof(mario_theme) / sizeof(mario_theme[0]) ) {
+      mario_Note = (int)round(max / mario_theme[i]);
+      play_note(mario_Note, mario_theme_durations[i]);
+      i++;
+    }
+  }else if (!(p2val & SW4)) {
+    led_green();
+    led_red();
+    int i = 0;
+    int sound_Note = 0;
+
+    while (i < sizeof(sound) / sizeof(sound[0]) ) {
+      sound_Note = (int)round(max / sound[i]);
+      play_note(sound_Note, 1);
+      i++;
+    }
+
+  }else {
+    play_note(0,0);
+  }
+}

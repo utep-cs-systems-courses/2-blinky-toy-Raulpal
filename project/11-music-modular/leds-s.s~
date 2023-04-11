@@ -1,0 +1,21 @@
+	.arch msp430g2553
+	.p2aligh 1,0
+	.text
+
+	.equ GREEN, 1
+	.equ RED, 64
+
+	.global led_init
+	.global greenControl
+	.global redControl
+
+	.extern P1OUT
+
+led_init:
+	
+
+greenControl:
+	xor #GREEN, &P1OUT
+	
+
+redControl:	

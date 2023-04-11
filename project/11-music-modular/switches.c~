@@ -1,0 +1,69 @@
+#include <msp430.h>
+#include "switches.h"
+#include "buzzer.h"
+#include "musicNotes.h"
+#include "led.h"
+
+void switch_init()
+{
+
+  P2REN |= SWITCHES;/* enables resistors for switches */
+
+  P2IE |= SWITCHES;/* enable interrupts from switches */
+
+  P2OUT |= SWITCHES;/* pull-ups for switches */
+
+  P2DIR &= ~SWITCHES;/* set switches' bits for input */
+
+}
+//unsigned int sound[7] = {302,302,255,255,227,227,255};
+void switch_interrupt_handler()
+{
+  char p2val = P2IN;
+
+  /* update switch interrupt to detect changes from current buttons */
+
+  P2IES |= (p2val & SWITCHES);/* if switch up, sense down */
+  P2IES &= (p2val | ~SWITCHES);/* if switch down, sense up */
+  
+
+  
+  if (!(p2val & SW1)) {
+    led_green();
+    // play a simple sounds
+    int i = 0;
+    while ( i < sizeof(sound)/ sizeof(sound[0])){ 
+      play_note(*(sound + i), 250); // fequency hz and duration ms
+      i++;
+    }
+  }else if (!(p2val & SW2)) {
+    led_red();
+    // play different sound
+      int i = 0;
+      while (i < 10) {
+	play_note(880, 100); // fequency hz and duration ms
+	play_note(1760,100);
+	i++;
+      }
+  } else if (!(p2val & SW3)) {
+    int i = 0;
+    while (i < 10) {
+      play_note(130,500);
+      
+      i++;
+    }
+  } 
+}
+
+void __interrupt_vec(PORT2_VECTOR) Port_2()
+{
+
+  if (P2IFG & SWITCHES) {      /* did a button cause this interrupt? */
+
+    P2IFG &= ~SWITCHES;      /* clear pending sw interrupts */
+
+    switch_interrupt_handler();/* single handler for all switches */
+
+  }
+
+}
