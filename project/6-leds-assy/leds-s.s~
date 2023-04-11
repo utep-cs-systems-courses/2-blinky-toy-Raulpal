@@ -1,0 +1,11 @@
+	.arch msp430g2553
+	.p2align 1,0
+	.text
+
+	.equ GREEN, 1		;Green led BIT0
+	.equ RED, 64 		;red led BIT6
+
+	.global greenControl
+	.global redControl
+
+	.extern P1OUT
